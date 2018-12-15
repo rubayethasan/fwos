@@ -43,7 +43,7 @@ class Generic
         }
 
         if(isset($parameter['rmax']))Yii::$app->params['rmax'] = $parameter['rmax'];
-        if(isset($parameter['total_round']))Yii::$app->params['total_round'] = $parameter['total_round'];
+        if(isset($parameter['total_round']))Yii::$app->params['total_round'] = $parameter['rmax'];
         /*if(isset($parameter['current_round']))Yii::$app->params['current_round'] = $parameter['current_round'];*/
         if(isset($parameter['max_gruppe']))Yii::$app->params['max_gruppe'] = $parameter['max_gruppe'];
         if(isset($parameter['zins_eigenkapital']))Yii::$app->params['zins_eigenkapital'] = $parameter['zins_eigenkapital'];
