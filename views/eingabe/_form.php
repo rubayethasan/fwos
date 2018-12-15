@@ -9,17 +9,17 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="eingabe-form">
-    <div class="col-lg-12 benutzer-create-heading">
+    <div class="benutzer-create-heading">
         <h4>Bitte beachten Sie:</h4>
         <p>Der Anbau, die Düngung usw. von Silomais kostet       <?=$c1[$g]?> €/ha </p>
         <p>Der Anbau, die Düngung usw. von Kurzumtrieb kostet    <?=$c2a[$g]?> €/ha</p>
     </div>
-    <div class="col-lg-12 eingabe-form-heading">
+    <div class="eingabe-form-heading">
         <h4>Diese Eingaben sind für Runde <?=$round?></h4>
     </div>
 
     <?php $form = ActiveForm::begin(); ?>
-    <div class='col-lg-12 form-body'>
+    <div class='form-body'>
         <div class="eingabe-section">
             <div>
                 <h4>1. Produktion</h4>
@@ -90,7 +90,7 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
     </div>
-    <div class="col-lg-12 form-group form-footer">
+    <div class="form-group form-footer">
 
         <?= Html::resetButton(Yii::t('app', 'löschen'), ['class' => 'btn btn-primary']) ?>
         <?= Html::submitButton(Yii::t('app', 'weiter'), ['class' => 'btn btn-success']) ?>
