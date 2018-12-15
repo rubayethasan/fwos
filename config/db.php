@@ -1,6 +1,6 @@
 <?php
 
-return [
+/*return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=Planspiel_MySQL',
     'username' => 'root',
@@ -11,9 +11,9 @@ return [
     //'enableSchemaCache' => true,
     //'schemaCacheDuration' => 60,
     //'schemaCache' => 'cache',
-];
+];*/
 
-/*return [
+return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=mysqldb.gwdg.de:3307;dbname=planspiel_fwos',
     'username' => 'fwos_user',
@@ -24,4 +24,4 @@ return [
     'enableSchemaCache' => true,
     'schemaCacheDuration' => 60,
     'schemaCache' => 'cache',
-];*/
+];
