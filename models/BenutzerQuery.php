@@ -15,7 +15,7 @@ class BenutzerQuery extends \yii\db\ActiveQuery
     }*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return Benutzer[]|array
      */
     public function all($db = null)
@@ -24,7 +24,7 @@ class BenutzerQuery extends \yii\db\ActiveQuery
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return Benutzer|array|null
      */
     public function one($db = null)

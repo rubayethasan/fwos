@@ -5,10 +5,9 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "benutzer".
+ * This is the model class for table "{{%benutzer}}".
  *
  * @property int $id
- * @property int $user_id
  * @property string $regel
  * @property string $name
  * @property int $gruppe
@@ -25,55 +24,64 @@ use Yii;
  */
 class Benutzer extends \yii\db\ActiveRecord
 {
+    public $password_wiederholen;
+    //public $verifyCode;
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tableName()
     {
-        return 'benutzer';
+        return '{{%benutzer}}';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['user_id', 'regel', 'name', 'gruppe', 'vorname', 'geschlecht', 'email', 'studienfach', 'semester', 'kenntnisse', 'username', 'password', 'rolle', 'status'], 'required'],
-            [['user_id', 'gruppe', 'semester'], 'integer'],
-            [['regel', 'geschlecht', 'kenntnisse', 'status'], 'string'],
-            [['name', 'vorname', 'email', 'studienfach', 'username', 'password', 'rolle'], 'string', 'max' => 255],
-            [['username'], 'unique'],
-            [['user_id'], 'unique'],
+
+            [['regel', 'name', 'vorname', 'geschlecht', 'email', 'studienfach', 'semester', 'kenntnisse', 'username'], 'required'],
+            [['regel', 'geschlecht', 'kenntnisse'], 'string'],
+            [['semester', 'status','gruppe'], 'integer'],
+            [['email'], 'email'],
+            ['username', 'unique'],
+            [['name', 'vorname', 'email', 'studienfach', 'username','rolle'], 'string', 'max' => 255],
+
+            ['password', 'string', 'min' => 6,'max' => 255],
+            [['password','password_wiederholen'], 'required', 'on' => 'create'],
+            ['password_wiederholen', 'compare', 'compareAttribute'=>'password' ,'on' => 'create'],
+            ['regel', 'compare', 'compareValue'=>'ja' ],
+            //['verifyCode', 'captcha','on' => 'create'],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'regel' => 'Regel',
-            'name' => 'Name',
-            'gruppe' => 'Gruppe',
-            'vorname' => 'Vorname',
-            'geschlecht' => 'Geschlecht',
-            'email' => 'Email',
-            'studienfach' => 'Studienfach',
-            'semester' => 'Semester',
-            'kenntnisse' => 'Kenntnisse',
-            'username' => 'Username',
-            'password' => 'Password',
-            'rolle' => 'Rolle',
-            'status' => 'Status',
+            'id' => Yii::t('app', 'ID'),
+            'regel' => Yii::t('app', 'Regel'),
+            'name' => Yii::t('app', 'Name'),
+            'gruppe' => Yii::t('app', 'Gruppe'),
+            'vorname' => Yii::t('app', 'Vorname'),
+            'geschlecht' => Yii::t('app', 'Geschlecht'),
+            'email' => Yii::t('app', 'Email'),
+            'studienfach' => Yii::t('app', 'Studienfach'),
+            'semester' => Yii::t('app', 'Semester'),
+            'kenntnisse' => Yii::t('app', 'Kenntnisse'),
+            'username' => Yii::t('app', 'Benutzername'),
+            'password' => Yii::t('app', 'Passwort'),
+            'rolle' => Yii::t('app', 'Rolle'),
+            'status' => Yii::t('app', 'Status'),
+            //'verifyCode' => Yii::t('app', 'Bestätigungscode'),
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @return BenutzerQuery the active query used by this AR class.
      */
     public static function find()
