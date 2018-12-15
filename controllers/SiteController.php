@@ -66,9 +66,9 @@ class SiteController extends Controller
         $benutzer = Benutzer::find()
             ->asArray()
             ->all();
-        print_r($benutzer);
-        die();
-        return $this->render('index');
+        return $this->render('index', [
+            'benutzer' => $benutzer,
+        ]);
     }
 
     /**
