@@ -11,7 +11,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'name' => 'Feld, Wald oder Schweine <br> Sommersemester 2017 Göttingen </br>',
+    'name' => 'Feld, Wald oder Schweine <br> Sommersemester 2019 Göttingen </br>',
     #'defaultRoute' => 'site/index',
     'layout' => 'custom-main',
     'components' => [

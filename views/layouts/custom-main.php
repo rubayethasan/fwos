@@ -101,7 +101,7 @@ if(Yii::$app->user->isGuest){
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Feld, Wald oder Schweine Sommersemester 2019 Göttingen</p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
