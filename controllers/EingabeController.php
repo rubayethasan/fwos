@@ -247,7 +247,12 @@ class EingabeController extends Ccontroller
     public function actionResult(){
 
         $users = Generic::getAllUserDetails(['id','username'],['rolle'=>'user', 'status' => '1']);
-        return $this->render('result',['users' => $users]);
+        if(!empty($users)){
+            return $this->render('result',['users' => $users]);
+        }else{
+            Yii::$app->session->setFlash('danger', "No data for this round.");
+            return $this->redirect(['site/index']);
+        }
     }
 
     /**
