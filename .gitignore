@@ -20,6 +20,7 @@ web/assets
 web/berichte
 web/data
 web/files/**
+web/files/
 
 #config/db.php
 
