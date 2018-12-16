@@ -2,7 +2,8 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Feld, Wald oder Schweine Sommersemester 2019 Göttingen';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-index">
 
