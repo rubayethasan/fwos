@@ -21,7 +21,7 @@ web/berichte
 web/data
 web/files/**
 
-config/db.php
+#config/db.php
 
 # composer itself is not needed
 composer.phar
