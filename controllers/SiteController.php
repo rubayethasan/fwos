@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\Benutzer;
-use app\models\Questionset;
 use Yii;
 use yii\filters\AccessControl;
 //use yii\web\Controller;
@@ -12,7 +10,6 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\Components\Generic;
 
 class SiteController extends Ccontroller
 {
@@ -22,23 +19,23 @@ class SiteController extends Ccontroller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout','openpdf'],
+                'rules' => [
+                    [
+                        'actions' => ['logout','openpdf'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -135,35 +132,5 @@ class SiteController extends Ccontroller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    public function actionPreview(){
-        $data = Yii::$app->request->post('all_data');
-        return $this->renderPartial('preview',['data' => $data]);
-    }
-
-    public function actionStoredata(){
-        $response = false;
-        $data = Yii::$app->request->post('processed_data');
-        $model = new Questionset();
-        $model->round = $data['round'];
-        $model->qn_des = $data['additional_description'];
-        $model->qn_ans = json_encode($data);
-        $model->create_date = date("Y-m-d H:i:s");
-        //$model->created_by = Generic::getCurrentuser(Yii::$app->user->id,'username');
-        if($model->save()){
-            $response = true;
-        }
-        return $response;
-    }
-
-    public function actionCheckqnexists(){
-        $response = false;
-        $round = Yii::$app->request->post('round');
-        $user = Questionset::find()->where(["round" => $round])->asArray()->one();
-        if(!empty($user)){
-            $response = true;
-        }
-        return $response;
     }
 }

@@ -7,8 +7,31 @@ use Yii;
 use app\models\Testfragetrace;
 use app\models\Evaluierung;
 use app\models\Eingabe;
+use yii\filters\AccessControl;
 class AjaxController extends \yii\web\Controller
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['testfragecompletion','storeeval','loadresult'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['testfragecompletion','storeeval','loadresult'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
+
+        ];
+    }
+
     /**
      * Ajax action for checking and storing rounds in test frage trace table
      * @return bool

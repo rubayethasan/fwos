@@ -5,14 +5,17 @@ namespace app\controllers;
 use Yii;
 use app\models\Evaluierung;
 use app\models\EvaluierungSearch;
-use yii\web\Controller;
+//use yii\web\Controller;
+use app\Components\Ccontroller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\Components\Generic;
+use yii\filters\AccessControl;
 
 /**
  * EvaluierungController implements the CRUD actions for Evaluierung model.
  */
-class EvaluierungController extends Controller
+class EvaluierungController extends Ccontroller
 {
     /**
      * @inheritdoc
@@ -26,6 +29,17 @@ class EvaluierungController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['delete','index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['delete','index'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -35,6 +49,10 @@ class EvaluierungController extends Controller
      */
     public function actionIndex()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $searchModel = new EvaluierungSearch();
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -54,6 +72,10 @@ class EvaluierungController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

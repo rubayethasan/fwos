@@ -6,14 +6,16 @@ use Yii;
 use app\Components\Generic;
 use app\models\Marktspiel;
 use app\models\MarktspielSearch;
-use yii\web\Controller;
+//use yii\web\Controller;
+use app\Components\Ccontroller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * MarktspielController implements the CRUD actions for Marktspiel model.
  */
-class MarktspielController extends Controller
+class MarktspielController extends Ccontroller
 {
     /**
      * @inheritdoc
@@ -27,6 +29,17 @@ class MarktspielController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create','delete','index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create','delete','index'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -36,6 +49,10 @@ class MarktspielController extends Controller
      */
     public function actionIndex()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $searchModel = new MarktspielSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -81,6 +98,10 @@ class MarktspielController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

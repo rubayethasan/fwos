@@ -33,20 +33,15 @@ class EingabeController extends Ccontroller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['update','delete','index','view','ansehen','testfrage','neueingabe','rechnen','result','rangliste'],
+                'only' => ['create','update','delete','index','view','ansehen','testfrage','neueingabe','rechnen','result','rangliste','bewertungen','mitteilung','spieler'],
                 'rules' => [
-                    /*[
-                        'allow' => true,
-                        'actions' => ['login', 'signup'],
-                        'roles' => ['?'],
-                    ],*/
                     [
                         'allow' => true,
-                        'actions' => ['update','delete','index','view','ansehen','testfrage','neueingabe','rechnen','result','rangliste'],
+                        'actions' => ['create','update','delete','index','view','ansehen','testfrage','neueingabe','rechnen','result','rangliste','bewertungen','mitteilung','spieler'],
                         'roles' => ['@'],
                     ],
                 ],
-            ],
+            ]
         ];
     }
 
@@ -56,6 +51,10 @@ class EingabeController extends Ccontroller
      */
     public function actionIndex()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $searchModel = new EingabeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -161,6 +160,9 @@ class EingabeController extends Ccontroller
      */
     public function actionDelete($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -229,6 +231,9 @@ class EingabeController extends Ccontroller
      */
     public function actionRechnen(){
 
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
         $round = Yii::$app->params['rmax'];
         $rechnen = Generic::getEingabe($round);
         if(!empty($rechnen)){
@@ -246,6 +251,9 @@ class EingabeController extends Ccontroller
      */
     public function actionResult(){
 
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
         $users = Generic::getAllUserDetails(['id','username'],['rolle'=>'user', 'status' => '1']);
         if(!empty($users)){
             return $this->render('result',['users' => $users]);
@@ -260,6 +268,10 @@ class EingabeController extends Ccontroller
      * @return string
      */
     public function actionRangliste(){
+
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
         $round = Yii::$app->params['current_round'];
         $file_path = Yii::$app->basePath."/web/berichte/rangliste.html";
         if(file_exists($file_path)){
@@ -287,6 +299,10 @@ class EingabeController extends Ccontroller
      * @return string
      */
     public function actionBewertungen(){
+
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
 
         $evaluierung = Evaluierung::find()->asArray()->all();
         if(empty($evaluierung)){

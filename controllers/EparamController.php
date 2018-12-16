@@ -5,15 +5,17 @@ namespace app\controllers;
 use Yii;
 use app\models\Eparam;
 use app\models\EparamSearch;
-use yii\web\Controller;
+//use yii\web\Controller;
+use app\Components\Ccontroller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\Components\Generic;
+use yii\filters\AccessControl;
 
 /**
  * EparamController implements the CRUD actions for Eparam model.
  */
-class EparamController extends Controller
+class EparamController extends Ccontroller
 {
     /**
      * @inheritdoc
@@ -27,6 +29,17 @@ class EparamController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create','update','delete','index','view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create','update','delete','index','view'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -36,6 +49,10 @@ class EparamController extends Controller
      */
     public function actionIndex()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $searchModel = new EparamSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -53,6 +70,10 @@ class EparamController extends Controller
      */
     public function actionView($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -65,6 +86,9 @@ class EparamController extends Controller
      */
     public function actionCreate()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
         $model = new Eparam();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -90,6 +114,10 @@ class EparamController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -114,6 +142,10 @@ class EparamController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

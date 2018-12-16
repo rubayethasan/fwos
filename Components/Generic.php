@@ -64,6 +64,19 @@ class Generic
     }
 
     /**
+     * Function forchecking action permission
+     * @return bool
+     */
+    public static function checkPermission(){
+        $user_role = Generic::getCurrentuser(Yii::$app->user->id,'rolle');
+        if($user_role != 'admin'){
+            Yii::$app->session->setFlash('danger', "Access Denied");
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * function for getting current user details
      * @param $id
      * @param $key

@@ -35,18 +35,13 @@ class BenutzerController extends Ccontroller
                 'class' => AccessControl::className(),
                 'only' => ['update','delete','index','view'],
                 'rules' => [
-                    /*[
-                        'allow' => true,
-                        'actions' => ['login', 'signup'],
-                        'roles' => ['?'],
-                    ],*/
                     [
                         'allow' => true,
                         'actions' => ['update','delete','index','view'],
                         'roles' => ['@'],
                     ],
                 ],
-            ],
+            ]
 
         ];
     }
@@ -57,6 +52,9 @@ class BenutzerController extends Ccontroller
      */
     public function actionIndex()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
         $searchModel = new BenutzerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -143,6 +141,10 @@ class BenutzerController extends Ccontroller
      */
     public function actionUpdate($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -177,6 +179,10 @@ class BenutzerController extends Ccontroller
      */
     public function actionDelete($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $dlt_ok = true;
         /*functionality for updating current user number in essential parameter table. if any active user is deleted then the */
         $model = $this->findModel($id);

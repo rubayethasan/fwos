@@ -5,14 +5,18 @@ namespace app\controllers;
 use Yii;
 use app\models\Testfragetrace;
 use app\models\TestfragetraceSearch;
-use yii\web\Controller;
+//use yii\web\Controller;
+use app\Components\Ccontroller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use app\Components\Generic;
+
 
 /**
  * TestfragetraceController implements the CRUD actions for Testfragetrace model.
  */
-class TestfragetraceController extends Controller
+class TestfragetraceController extends Ccontroller
 {
     /**
      * @inheritdoc
@@ -26,6 +30,17 @@ class TestfragetraceController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['delete','index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['delete','index'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -35,6 +50,10 @@ class TestfragetraceController extends Controller
      */
     public function actionIndex()
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $searchModel = new TestfragetraceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -52,6 +71,10 @@ class TestfragetraceController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

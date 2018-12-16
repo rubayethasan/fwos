@@ -29,7 +29,6 @@ $current_round = Yii::$app->params['rmax'];
             <tr>
                 <th class="custom-tbl-header">Runde</th>
                 <th class="custom-tbl-header">Eingabe</th>
-                <th class="custom-tbl-header">Mitteilung</th>
             </tr>
             </thead>
             <tbody>
@@ -82,12 +81,13 @@ $current_round = Yii::$app->params['rmax'];
                                     <!--<a class="<?/*=$eingeben_anchor_class*/?>" href="<?/*=Yii::$app->request->baseUrl.'/eingeben/neueingeben/'.$i*/?>">eingeben</a>-->
                                     <a class="<?=$eingeben_anchor_class?>" href="<?=Yii::$app->request->baseUrl.'/eingabe/neueingabe/'.$i?>">eingeben</a>
                                 </td>
+                                <td class="<?=$mitteilung_class?>">
+                                    <a class="<?=$mitteilung_anchor_class?>" href="<?=Yii::$app->request->baseUrl.'/eingabe/mitteilung/'.$i?>">mitteilung</a>
+                                </td>
                             </tr>
                         </table>
                     </td>
-                    <td class="<?=$mitteilung_class?>">
-                        <a class="<?=$mitteilung_anchor_class?>" href="<?=Yii::$app->request->baseUrl.'/eingabe/mitteilung/'.$i?>">mitteilung</a>
-                    </td>
+
                 </tr>
             <?php } ?>
 
