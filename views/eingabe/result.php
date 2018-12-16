@@ -6,6 +6,10 @@
  * Time: 03:35
  */
 use yii\helpers\Html;
+
+$this->title = Yii::t('app', 'Result');
+$this->params['breadcrumbs'][] = $this->title;
+
 for($i = 1; $i <= Yii::$app->params['rmax']; $i++){
     $round[$i] = $i;
 }

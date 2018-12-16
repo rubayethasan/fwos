@@ -1,7 +1,5 @@
 .navbar-inverse {
      background-color: #163776;
-     border-color: #163776;
-     padding-bottom: 5px;
 }
 
 .benutzer-create-heading{
@@ -89,9 +87,6 @@
      background-color: ghostwhite;
 }
 
-/*.ans-container{
-     padding:10px;
-}*/
 
 .single-ans-container{
      padding: 5px;
