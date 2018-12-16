@@ -16,10 +16,12 @@ Thumbs.db
 /vendor
 
 # web dir
-/web/assets
-/web/berichte
-/web/data
-/web/files
+web/assets
+web/berichte
+web/data
+web/files
+
+#config/db.php
 
 # composer itself is not needed
 composer.phar
