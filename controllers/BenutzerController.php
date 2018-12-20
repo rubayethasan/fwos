@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Gruppe;
 use Yii;
 use app\models\Benutzer;
 use app\models\Testfragetrace;
@@ -72,6 +73,10 @@ class BenutzerController extends Ccontroller
      */
     public function actionView($id)
     {
+        if(!Generic::checkPermission()){
+            return $this->redirect(['site/index']);
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -102,27 +107,22 @@ class BenutzerController extends Ccontroller
             $previous_user = Benutzer::find()->select(['user_id'])->orderBy(['id' => SORT_DESC])->one();
             $model->user_id = $previous_user->user_id + 1;
 
-            /*reading last users group from log file*/
-            $gruppe_trace_file_path = Yii::$app->basePath."/web/files/lvgnr.txt";
-            $gruppe_trace_file = fopen($gruppe_trace_file_path, "r");
-            $gruppe = (int)fgets($gruppe_trace_file); //letzte vergebene Gruppennummer
-            $gruppe = ($gruppe >= Yii::$app->params['max_gruppe'])? 1 : $gruppe+1; // maximale Gruppennummer
-            fclose($gruppe_trace_file);
+            //reading last users group from db
+            $gruppe = Gruppe::find()->one();
+            $gruppe->gruppe = ($gruppe->gruppe >= Yii::$app->params['max_gruppe'])? 1 : $gruppe->gruppe + 1; // maximale Gruppennummer
 
-            $model->gruppe = $gruppe;
+            $model->gruppe = $gruppe->gruppe;
             if($model->save()){
                 /*keeping trace of gruppe*/
-                $gruppe_trace_file = fopen($gruppe_trace_file_path, "w");
-                fputs($gruppe_trace_file, "$gruppe\n");
-                fclose($gruppe_trace_file);
-
-                if(Yii::$app->user->isGuest){
-                    Yii::$app->session->setFlash('success', "Sie haben sich erfolgreich registriert. Vielen Dank!");
-                    return $this->render('view', [
-                        'model' => $this->findModel($model->id),
-                    ]);
+                if($gruppe->save()){
+                    if(Yii::$app->user->isGuest){
+                        Yii::$app->session->setFlash('success', "Sie haben sich erfolgreich registriert. Vielen Dank!");
+                        return $this->render('view', [
+                            'model' => $this->findModel($model->id),
+                        ]);
+                    }
+                    return $this->redirect(['view', 'id' => $model->id]);
                 }
-                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
@@ -148,20 +148,22 @@ class BenutzerController extends Ccontroller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-
+            $updated_fields = $model->getDirtyAttributes();
             if($model->save()){
                 /*functionality for updating current user number in essential parameter table.*/
-                $user_count = ($model->status == 1) ? 1 : -1;
-                $essential_param = Eparam::find()
-                    ->where(['name' => 'n'])
-                    ->one();
-                $essential_param->value = (string)((int)$essential_param->value + $user_count);
-                if($essential_param->save()){
-                    Yii::$app->session->setFlash('success', "Update Successful");
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }else{
-                    Yii::$app->session->setFlash('danger', "User count not updated");
-                };
+                if(!empty($updated_fields) && array_key_exists("status", $updated_fields)){
+                    $user_count = ($model->status == 1) ? 1 : -1;
+                    $essential_param = Eparam::find()
+                        ->where(['name' => 'n'])
+                        ->one();
+                    $essential_param->value = (string)((int)$essential_param->value + $user_count);
+                    if(!$essential_param->save()){
+                        Yii::$app->session->setFlash('danger', "User count not updated");
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    };
+                }
+                Yii::$app->session->setFlash('success', "Update Successful");
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
@@ -183,23 +185,14 @@ class BenutzerController extends Ccontroller
             return $this->redirect(['site/index']);
         }
 
-        $dlt_ok = true;
         /*functionality for updating current user number in essential parameter table. if any active user is deleted then the */
         $model = $this->findModel($id);
-        if($model->status == 1){
-            $essential_param = Eparam::find()
-                ->where(['name' => 'n'])
-                ->one();
-            $essential_param->value = (string)((int)$essential_param->value - 1);
-            if(!$essential_param->save()){
-                $dlt_ok = false;
-                Yii::$app->session->setFlash('danger', "User count not updated");
-            }
-        }
+        $dlt_ok = Generic::performBenutzerDeletionDependency($model);
 
         if($dlt_ok){
             $model->delete();
         }
+
         return $this->redirect(['index']);
     }
 

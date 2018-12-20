@@ -13,7 +13,9 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
-vendor/**
+vendor/
+runtime/**
+
 
 # web dir
 web/assets

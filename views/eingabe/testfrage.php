@@ -137,7 +137,7 @@ $preis_string = $Preis_Mais.'_'.$Preis_HHS.'_'.$Preis_Fleisch;
 
         <div class="custom-input">
             <?= Html::label('Fleisch von Mastschweinen:') ?>
-            <?= Html::textInput('wert_Fleisch'); ?> € / t
+            <?= Html::textInput('wert_Fleisch'); ?> € / kg
         </div>
 
     </div>

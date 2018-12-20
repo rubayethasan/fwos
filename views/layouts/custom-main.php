@@ -56,6 +56,7 @@ if(Yii::$app->user->isGuest){
         $menu_items[] = ['label' => 'Evaluierung', 'url' => ['/evaluierung/index']];
         $menu_items[] = ['label' => 'Marktspiel', 'url' => ['/marktspiel/index']];
         $menu_items[] = ['label' => 'Testfrage', 'url' => ['/testfragetrace/index']];
+        $menu_items[] = ['label' => 'Gruppe', 'url' => ['/gruppe/index']];
     }else{
         $menu_items[] = ['label' => 'Spielerbereich', 'url' => ['/eingabe/spieler']];
     }

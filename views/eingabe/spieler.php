@@ -15,6 +15,7 @@ $current_round = Yii::$app->params['rmax'];
     <h3><?= Html::encode('Willkommen im Spielerbereich') ?></h3>
 
     <div style="background-color: lightblue;padding: 10px; margin-bottom: 15px;">
+        <div style="text-align: right"><?= Html::a('Spielanleitung', ['site/openpdf'], ['class' => 'btn btn-primary', 'target' => '_blank',]); ?></div>
         <p>Hier haben Sie die Möglichkeit,</p>
         <ul>
             <li>Ihre bisherigen Eingaben noch einmal zu lesen,</li>

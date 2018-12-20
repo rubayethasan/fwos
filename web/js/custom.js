@@ -1,5 +1,6 @@
 var base_url = document.getElementById('baseurl').value;
 var evaluiering_data = {} ;
+var correct_email_domain = 'uni-goettingen.de';
 
 function toObject(arr) {
     var rv = {};
@@ -13,6 +14,19 @@ $(document).ready(function(){
     $('#testfrage-1').addClass('active-testfrage');
     $('#evaluierung-1').addClass('active-evaluierung');
     $('.evaluierung-input :input[type=text]').prop('required',true);
+
+    //validating email adress of benutzer form
+    $('#benutzer-email').on('blur',function (e) {
+        var email_str = e.target.value;
+        if(!email_str == ''){
+            var email_str_arr = email_str.split("@");
+            var email_domain = email_str_arr[1];
+            if(!email_domain || email_domain.indexOf(correct_email_domain) === -1) {
+                e.target.value = email_str_arr[0];
+                alert('Bitte verwenden Sie eine Göttinger E-Mail-Adresse');
+            }
+        }
+    })
 });
 
 /**

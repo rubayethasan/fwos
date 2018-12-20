@@ -10,6 +10,8 @@ namespace app\Components;
 
 use app\models\Eingeben;
 use app\models\Eingabe;
+use app\models\Evaluierung;
+use app\models\Marktspiel;
 use Yii;
 use app\models\Benutzer;
 use app\models\Eparam;
@@ -90,6 +92,47 @@ class Generic
             ->one();
         return $user[$key];
 
+    }
+
+
+    public static function performBenutzerDeletionDependency($model){
+
+        $dlt_ok = true;
+        $username = $model->username;
+        // deleting all eigabe for the user
+        $eingaben = Eingabe::find()->where(['username' => $username])->all();
+        if(!empty($eingaben) && !Eingabe::deleteAll(['username' => $username])){
+            $dlt_ok = false;
+        }
+
+        // deleting all test frage for the user
+        $testfragetrace = Testfragetrace::find()->where(['username' => $username])->all();
+        if(!empty($testfragetrace) && !Testfragetrace::deleteAll(['username' => $username])){
+            $dlt_ok = false;
+        }
+
+        // deleting all evaluierung for the user
+        $evaluierung = Evaluierung::find()->where(['username' => $username])->all();
+        if(!empty($evaluierung) && !Evaluierung::deleteAll(['username' => $username])){
+            $dlt_ok = false;
+        }
+
+        // deleting all test merktspiel for the user
+        $marktspiel = Marktspiel::find()->where(['username' => $username])->all();
+        if(!empty($marktspiel) && !Marktspiel::deleteAll(['username' => $username])){
+            $dlt_ok = false;
+        }
+
+        // updating user number in eparam
+        if($model->status == 1){
+            $essential_param = Eparam::find()->where(['name' => 'n'])->one();
+            $essential_param->value = (string)((int)$essential_param->value - 1);
+            if(!$essential_param->save()){
+                $dlt_ok = false;
+            }
+        }
+
+        return $dlt_ok;
     }
 
     /**

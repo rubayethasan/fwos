@@ -72,6 +72,17 @@ class EingabeController extends Ccontroller
      */
     public function actionView($id)
     {
+        //restricting users to view another users eingabe
+        $user_role = Generic::getCurrentuser(Yii::$app->user->id,'rolle');
+        if($user_role != 'admin'){
+            $model = $this->findModel($id);
+            $current_user_name = Generic::getCurrentuser(Yii::$app->user->id,'username');
+            if($current_user_name != $model->username){
+                Yii::$app->session->setFlash('danger', "Access Denied");
+                return $this->redirect(['site/index']);
+            }
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id)
         ]);
@@ -125,7 +136,16 @@ class EingabeController extends Ccontroller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $round = $model->round;
+
+        //restricting users to update another users eingabe
+        $user_role = Generic::getCurrentuser(Yii::$app->user->id,'rolle');
+        if($user_role != 'admin'){
+            $current_user_name = Generic::getCurrentuser(Yii::$app->user->id,'username');
+            if($current_user_name != $model->username){
+                Yii::$app->session->setFlash('danger', "Access Denied");
+                return $this->redirect(['site/index']);
+            }
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -146,7 +166,7 @@ class EingabeController extends Ccontroller
         $c2a = explode("#", Yii::$app->params['c2a']); array_unshift($c2a, 0);
 
         return $this->render('update', [
-            'model' => $model, 'c1'=>$c1, 'c2a'=>$c2a, 'g'=>$g, 'round' => $round
+            'model' => $model, 'c1'=>$c1, 'c2a'=>$c2a, 'g'=>$g, 'round' => $model->round
         ]);
 
     }
