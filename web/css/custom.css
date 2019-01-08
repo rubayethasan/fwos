@@ -59,6 +59,7 @@
 
 .cutom-td-deactivate{
      background-color: gainsboro;
+     cursor: not-allowed;
 }
 
 .not-active {

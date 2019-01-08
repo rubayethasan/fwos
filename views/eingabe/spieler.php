@@ -52,18 +52,21 @@ $current_round = Yii::$app->params['rmax'];
                     $eingeben_anchor_class = '';
                 }
 
-                if($i > $current_round ){ //for ansehen and mitteilung
+                if($i > $current_round ){ //for ansehen
                     $ansehen_class = 'cutom-td-deactivate';
                     $ansehen_anchor_class = 'not-active';
                     $tr_class = 'custom-tr-deactive';
                     $inside_tbl_class = '';
 
-                    $mitteilung_class = 'cutom-td-deactivate';
-                    $mitteilung_anchor_class = 'not-active';
                 }else{
                     $ansehen_class = '';
                     $ansehen_anchor_class = '';
+                }
 
+                if($i >= $current_round ){ //for mitteilung
+                    $mitteilung_class = 'cutom-td-deactivate';
+                    $mitteilung_anchor_class = 'not-active';
+                }else{
                     $mitteilung_class = '';
                     $mitteilung_anchor_class = '';
                 }
@@ -83,7 +86,7 @@ $current_round = Yii::$app->params['rmax'];
                                     <a class="<?=$eingeben_anchor_class?>" href="<?=Yii::$app->request->baseUrl.'/eingabe/neueingabe/'.$i?>">eingeben</a>
                                 </td>
                                 <td class="<?=$mitteilung_class?>">
-                                    <a class="<?=$mitteilung_anchor_class?>" href="<?=Yii::$app->request->baseUrl.'/eingabe/mitteilung/'.$i?>">mitteilung</a>
+                                    <a class="<?=$mitteilung_anchor_class?>" href="<?=Yii::$app->request->baseUrl.'/eingabe/mitteilung/'.$i?>">Mitteilung</a>
                                 </td>
                             </tr>
                         </table>
